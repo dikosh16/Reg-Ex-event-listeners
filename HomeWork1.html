@@ -1,0 +1,83 @@
+<!-- Доработайте пример, 005_thisExample.html, при наведении мыши к одному из блоков, цвет блока должен измениться, на уникальный, такой которого еще нету у существующих блоков.
+Также выведите в блок текстовое оповещение о информации цвета, который используется для фона данного блока.
+При попытке закрыть вкладку, придупредите пользователя о том что информация будет утеряна. Используйте window.onload.  -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ключевое слово this</title>
+    <style>
+        div {
+            background-color:green;
+            display: inline-block;
+            height: 100px;
+            width: 100px;
+            margin: 10px;
+            position: relative;
+        }
+        div span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            font-size: 18px;
+            font-weight: 700;
+            color: #9a8282;
+        }
+    </style>
+</head>
+<body>
+    <div><span></span></div>
+    <div><span></span></div>
+    <div><span></span></div>
+    <div><span></span></div>
+    <div><span></span></div><br><br>
+    <button onclick="setHandler()">Поставити window.onbeforeunload</button><br><br>
+    <a href="https://itea.ua/">Уйти</a>
+    <script>
+        var divArr = document.getElementsByTagName("div");
+
+        var Mycolors = ["yellow", "pink", "blue", "orange", "brown"];
+
+        // Функція для отримання випадкового кольору з масиву
+        function getRandomMyColor(colors) {
+            if (colors.length === 0) {
+                return null; 
+            }
+            var randomIndex = Math.floor(Math.random() * colors.length);
+            var color = colors[randomIndex];
+            colors.splice(randomIndex, 1);
+            return color;
+        }
+
+        // Функція для оновлення фону блоку та відображення назви кольору
+        function changeColorAndShowInfo() {
+            var color = getRandomMyColor(Mycolors);
+            if (color === null) {
+                alert("Усі кольори використані!");
+                return;
+            }
+
+            this.style.backgroundColor = color;
+            
+            // Відображаємо назву кольору в елементі span
+            var span = this.querySelector("span");
+            span.textContent = color;
+            span.style.display = "block";
+        }
+
+        // Додаємо обробник події при наведенні курсору на блок
+        for (var i = 0; i < divArr.length; i++) {
+            divArr[i].onmouseover = changeColorAndShowInfo;
+        }
+
+        // Додаємо обробник події при спробі закрити вкладку
+        function setHandler() {
+            window.onbeforeunload = function() {
+            return "Інформація буде втрачена! Ви впевнені, що хочете закрити вкладку?";
+            }
+        };
+    </script>
+</body>
+</html>
